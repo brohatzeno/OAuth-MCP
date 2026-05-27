@@ -1,0 +1,10 @@
+node_modules/
+venv/
+.venv/
+.env
+npm-debug.log*
+__pycache__/
+.pytest_cache/
+certs/
+logs/
+.oauth-clients.json
