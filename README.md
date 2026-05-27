@@ -85,6 +85,8 @@ Root API config lives in `.env`:
 SERVER_HOST=127.0.0.1
 SERVER_PORT=8000
 COMPANY_DOMAIN=gmail.com
+BACKEND_USER_1_EMAIL=admin@gmail.com
+BACKEND_USER_1_PASSWORD=password123
 ```
 
 OAuth/MCP config lives in `entity-auth-demo/.env`:
@@ -131,15 +133,18 @@ curl -X POST http://127.0.0.1:8000/login \
   -d '{"email":"admin@gmail.com","password":"password123"}'
 ```
 
-Default root API users all use `password123`:
+Default root API users are configured in `.env` with `BACKEND_USER_*` variables:
 
 ```text
-admin@gmail.com
-qa@gmail.com
-finance@gmail.com
-marketing@gmail.com
-sales@gmail.com
+BACKEND_USER_1_EMAIL=admin@gmail.com
+BACKEND_USER_1_PASSWORD=password123
+BACKEND_USER_1_FULL_NAME=Admin User
+BACKEND_USER_1_DEPARTMENT=Engineering
 ```
+
+Add more users by incrementing the number, for example `BACKEND_USER_2_EMAIL`,
+`BACKEND_USER_2_PASSWORD`, `BACKEND_USER_2_FULL_NAME`, and
+`BACKEND_USER_2_DEPARTMENT`.
 
 ## Run The OAuth + MCP Stack
 

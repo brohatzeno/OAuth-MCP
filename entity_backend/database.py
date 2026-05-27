@@ -1,13 +1,18 @@
 """
 Mock Database Module.
 
-Contains hardcoded user data and dummy records for development/testing.
+Contains environment-configured user data and dummy records for development/testing.
 In production, replace with actual database connections.
 """
 
+import os
 from dataclasses import dataclass
 from datetime import datetime
 from typing import Any, Dict, Optional
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 
 # =====================================================================
@@ -23,40 +28,33 @@ class MockUser:
     department: str
 
 
-# Hardcoded mock users for testing
-# Password: all users have password "password123" for demo purposes
-MOCK_USERS: Dict[str, MockUser] = {
-    "admin@gmail.com": MockUser(
-        email="admin@gmail.com",
-        full_name="Admin User",
-        password="password123",
-        department="Engineering"
-    ),
-    "qa@gmail.com": MockUser(
-        email="qa@gmail.com",
-        full_name="QA Team Lead",
-        password="password123",
-        department="Quality Assurance"
-    ),
-    "finance@gmail.com": MockUser(
-        email="finance@gmail.com",
-        full_name="Finance Manager",
-        password="password123",
-        department="Finance"
-    ),
-    "marketing@gmail.com": MockUser(
-        email="marketing@gmail.com",
-        full_name="Marketing Director",
-        password="password123",
-        department="Marketing"
-    ),
-    "sales@gmail.com": MockUser(
-        email="sales@gmail.com",
-        full_name="Sales Lead",
-        password="password123",
-        department="Sales"
-    ),
-}
+def _load_mock_users() -> Dict[str, MockUser]:
+    """Load demo login credentials from BACKEND_USER_* environment variables."""
+    users: Dict[str, MockUser] = {}
+
+    for index in range(1, 51):
+        prefix = f"BACKEND_USER_{index}"
+        email = os.getenv(f"{prefix}_EMAIL", "").strip().lower()
+        password = os.getenv(f"{prefix}_PASSWORD", "")
+
+        if not email and not password:
+            continue
+        if not email or not password:
+            raise RuntimeError(
+                f"{prefix}_EMAIL and {prefix}_PASSWORD must both be set."
+            )
+
+        users[email] = MockUser(
+            email=email,
+            full_name=os.getenv(f"{prefix}_FULL_NAME", email.split("@")[0]).strip(),
+            password=password,
+            department=os.getenv(f"{prefix}_DEPARTMENT", "General").strip(),
+        )
+
+    return users
+
+
+MOCK_USERS: Dict[str, MockUser] = _load_mock_users()
 
 
 def get_user_by_email(email: str) -> Optional[MockUser]:
