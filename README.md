@@ -1,6 +1,6 @@
-# entity.co OAuth Backend POC
+# OAuth MCP Backend POC
 
-This repo contains a local proof of concept for entity.co authentication and MCP connector testing. It has two related backends:
+This repo contains a local proof of concept for OAuth authentication and MCP connector testing. It has two related backends:
 
 - `entity_backend/`: a simple JWT-protected FastAPI API.
 - `entity-auth-demo/`: a mock OAuth 2.0 authorization server plus a protected MCP server for Claude custom connector testing.
@@ -20,14 +20,14 @@ OAuth Backend POC/
 │   ├── auth_server/index.py    # Mock OAuth authorization server
 │   ├── mcp_server/index.py     # Protected MCP server and tools
 │   ├── scripts/                # Local stack launchers
-│   ├── certs/                  # Localhost TLS certs for HTTPS harness
+│   ├── certs/                  # Generated localhost TLS certs, ignored by git
 │   ├── https-harness.py        # Local HTTPS reverse proxy
 │   ├── login.py                # Optional browser login helper
-│   ├── .env                    # Local OAuth/MCP config
+│   ├── .env                    # Local OAuth/MCP config, ignored by git
 │   └── .env.example
 ├── docs/system.md              # System notes and flow reference
 ├── requirements.txt            # Shared Python dependencies
-├── .env                        # Root API config
+├── .env                        # Root API config, ignored by git
 └── .env.example
 ```
 
@@ -75,7 +75,7 @@ cp .env.example .env
 cp entity-auth-demo/.env.example entity-auth-demo/.env
 ```
 
-The checked-in local `.env` files already contain working demo values on this machine. For a fresh setup, edit secrets and employee values before starting services.
+Real `.env` files are intentionally ignored by git. Copy the examples, then edit secrets and employee values before starting services.
 
 ## Configuration
 
