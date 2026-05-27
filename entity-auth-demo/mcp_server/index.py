@@ -54,14 +54,27 @@ def require_env(name: str) -> str:
 
 def load_mock_employees() -> list[dict[str, str]]:
     # Directory identities are also sourced from .env so login identifiers are not hardcoded.
-    return [
-        {
-            "name": require_env(f"ENTITY_EMPLOYEE_{index}_NAME"),
-            "email": require_env(f"ENTITY_EMPLOYEE_{index}_EMAIL"),
-            "role": require_env(f"ENTITY_EMPLOYEE_{index}_ROLE"),
-        }
-        for index in range(1, 4)
-    ]
+    employees: list[dict[str, str]] = []
+
+    for index in range(1, 51):
+        prefix = f"ENTITY_EMPLOYEE_{index}"
+        email = os.getenv(f"{prefix}_EMAIL", "").strip().lower()
+
+        if not email:
+            continue
+
+        employees.append(
+            {
+                "name": os.getenv(f"{prefix}_NAME", email.split("@")[0]).strip(),
+                "email": email,
+                "role": os.getenv(f"{prefix}_ROLE", "Employee").strip(),
+            }
+        )
+
+    if not employees:
+        raise RuntimeError("At least one ENTITY_EMPLOYEE_* login must be configured.")
+
+    return employees
 
 
 MOCK_EMPLOYEES = load_mock_employees()

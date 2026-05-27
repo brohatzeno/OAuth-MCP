@@ -100,7 +100,8 @@ ENTITY_PUBLIC_MCP_URL=https://localhost:3443/mcp
 ENTITY_JWT_SECRET=...
 ENTITY_OAUTH_CLIENT_ID=...
 ENTITY_OAUTH_CLIENT_SECRET=...
-ENTITY_EMPLOYEE_1_EMAIL=alice@gmail.com
+ENTITY_EMPLOYEE_1_EMAIL=admin@gmail.com
+ENTITY_EMPLOYEE_1_PASSWORD=password123
 ```
 
 ## Run The Root API
@@ -172,6 +173,10 @@ Remote MCP server URL: https://localhost:3443/mcp
 OAuth Client ID: value from ENTITY_OAUTH_CLIENT_ID
 OAuth Client Secret: value from ENTITY_OAUTH_CLIENT_SECRET
 ```
+
+The OAuth login page uses the `ENTITY_EMPLOYEE_*` values in
+`entity-auth-demo/.env`. By default, the first demo login is
+`admin@gmail.com` with password `password123`.
 
 For a public temporary tunnel:
 

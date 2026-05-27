@@ -43,14 +43,27 @@ def load_employees() -> dict[str, dict[str, str]]:
     # A real identity provider would validate against a database or directory.
     employees = {}
 
-    for index in range(1, 4):
-        email = require_env(f"ENTITY_EMPLOYEE_{index}_EMAIL")
+    for index in range(1, 51):
+        prefix = f"ENTITY_EMPLOYEE_{index}"
+        email = os.getenv(f"{prefix}_EMAIL", "").strip().lower()
+        password = os.getenv(f"{prefix}_PASSWORD", "")
+
+        if not email and not password:
+            continue
+        if not email or not password:
+            raise RuntimeError(
+                f"{prefix}_EMAIL and {prefix}_PASSWORD must both be set."
+            )
+
         employees[email] = {
             "email": email,
-            "password": require_env(f"ENTITY_EMPLOYEE_{index}_PASSWORD"),
-            "name": require_env(f"ENTITY_EMPLOYEE_{index}_NAME"),
-            "role": require_env(f"ENTITY_EMPLOYEE_{index}_ROLE"),
+            "password": password,
+            "name": os.getenv(f"{prefix}_NAME", email.split("@")[0]).strip(),
+            "role": os.getenv(f"{prefix}_ROLE", "Employee").strip(),
         }
+
+    if not employees:
+        raise RuntimeError("At least one ENTITY_EMPLOYEE_* login must be configured.")
 
     return employees
 
@@ -332,7 +345,7 @@ def authorize_submit(
     if client_id not in OAUTH_CLIENTS:
         raise HTTPException(status_code=401, detail="Invalid OAuth client_id.")
 
-    employee = EMPLOYEES.get(email)
+    employee = EMPLOYEES.get(email.strip().lower())
 
     if not employee or employee["password"] != password:
         return HTMLResponse(
